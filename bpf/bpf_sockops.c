@@ -1,4 +1,4 @@
-#include <linux/bpf.h>
+#include <uapi/linux/bpf.h>
 
 #include "bpf_sockops.h"
 

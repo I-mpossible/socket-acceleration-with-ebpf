@@ -1,4 +1,4 @@
-#include <linux/swab.h>
+#include <swab.h>
 
 #ifndef __section
 #define __section(NAME) 	\
