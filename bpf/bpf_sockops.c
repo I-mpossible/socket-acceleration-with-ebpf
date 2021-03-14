@@ -1,6 +1,6 @@
 #include <uapi/linux/bpf.h>
-#include <stdlib.h>
-#include <string.h>
+#include <linux/vmalloc.h>
+#include <linux/string.h>
 #include "bpf_sockops.h"
 
 /*
@@ -30,7 +30,7 @@ void bpf_sock_ops_ipv4(struct bpf_sock_ops *skops)
     int ret;
 
     printk("\nskops dport is %d\n", bpf_ntohl(skops->remote_port));
-    struct bpf_sock_ops *new_skops = (struct bpf_sock_ops) malloc (sizeof(struct bpf_sock_ops));
+    struct bpf_sock_ops *new_skops = (struct bpf_sock_ops) vmalloc (sizeof(struct bpf_sock_ops));
     new_skops->remote_port = 1001;
     printk("\nskops dport changed %d\n", bpf_ntohl(new_skops->remote_port));
 
