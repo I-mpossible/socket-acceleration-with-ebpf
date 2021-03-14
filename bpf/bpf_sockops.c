@@ -85,17 +85,17 @@ void bpf_sock_ops_ipv4(struct bpf_sock_ops *skops)
 
     
 
-    printk("\nskops dport changed %d\n", bpf_ntohl(new_skops->remote_port));
+    printk("\nskops dport changed %d\n", bpf_ntohl(skops->remote_port));
 
-    extract_key4_from_ops(new_skops, &key);
+    extract_key4_from_ops(skops, &key);
 
-    ret = sock_hash_update(new_skops, &sock_ops_map, &key, BPF_NOEXIST);
+    ret = sock_hash_update(skops, &sock_ops_map, &key, BPF_NOEXIST);
     if (ret != 0) {
         printk("sock_hash_update() failed, ret: %d\n", ret);
     }
 
     printk("sockmap: op %d, port %d --> %d\n",
-            new_skops->op, new_skops->local_port, bpf_ntohl(new_skops->remote_port));
+            skops->op, skops->local_port, bpf_ntohl(skops->remote_port));
 }
 
 __section("sockops")
