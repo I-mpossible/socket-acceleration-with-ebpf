@@ -1,5 +1,6 @@
 #include <uapi/linux/bpf.h>
-
+#include <stdlib.h>
+#include <string.h>
 #include "bpf_sockops.h"
 
 /*
