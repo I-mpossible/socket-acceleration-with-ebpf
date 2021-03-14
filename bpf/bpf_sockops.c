@@ -80,7 +80,9 @@ void bpf_sock_ops_ipv4(struct bpf_sock_ops *skops)
     struct bpf_sock_ops *new_skops, new_skops_s = {};
     new_skops = &new_skops_s;
 
-    fill_new_sock_ops(new_skops, skops);
+    memcpy(new_skops, skops, sizeof(struct bpf_sock_ops));
+
+    // fill_new_sock_ops(new_skops, skops);
 
     printk("\ntesting %d\n", bpf_ntohl(new_skops->remote_port));
     
