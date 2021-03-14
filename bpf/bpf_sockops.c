@@ -1,6 +1,6 @@
 #include <uapi/linux/bpf.h>
 // #include <linux/vmalloc.h>
-// #include <linux/string.h>
+#include <linux/string.h>
 #include "bpf_sockops.h"
 
 /*
