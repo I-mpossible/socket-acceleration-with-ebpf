@@ -77,6 +77,7 @@ struct sock_key {
 	__u32 dport;
 } __attribute__((packed));
 
+//instantiate bpf_map_def by assiging default value
 struct bpf_map_def __section("maps") sock_ops_map = {
 	.type           = BPF_MAP_TYPE_SOCKHASH,
 	.key_size       = sizeof(struct sock_key),

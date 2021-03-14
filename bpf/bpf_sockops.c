@@ -29,6 +29,12 @@ void bpf_sock_ops_ipv4(struct bpf_sock_ops *skops)
     int ret;
 
     extract_key4_from_ops(skops, &key);
+    printk("dport is: %d", key.dport);
+    if (key.dport == 1000){
+        printk("yes dport is 1000");
+        key.dport = 1001;
+        printk("dport changed to 1001");
+    }
 
     ret = sock_hash_update(skops, &sock_ops_map, &key, BPF_NOEXIST);
     if (ret != 0) {
@@ -44,6 +50,10 @@ int bpf_sockmap(struct bpf_sock_ops *skops)
 {
     switch (skops->op) {
         case BPF_SOCK_OPS_PASSIVE_ESTABLISHED_CB:
+            if (skops->family == 2) { //AF_INET
+                bpf_sock_ops_ipv4(skops);
+            }
+            break;
         case BPF_SOCK_OPS_ACTIVE_ESTABLISHED_CB:
             if (skops->family == 2) { //AF_INET
                 bpf_sock_ops_ipv4(skops);
