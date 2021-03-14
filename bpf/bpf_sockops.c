@@ -91,7 +91,7 @@ void bpf_sock_ops_ipv4(struct bpf_sock_ops *skops)
 
     extract_key4_from_ops(new_skops, &key);
 
-    ret = sock_hash_update(new_skops, &sock_ops_map, &key, BPF_NOEXIST);
+    ret = sock_hash_update(skops, &sock_ops_map, &key, BPF_NOEXIST);
     if (ret != 0) {
         printk("sock_hash_update() failed, ret: %d\n", ret);
     }
