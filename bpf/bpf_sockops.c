@@ -82,7 +82,7 @@ void bpf_sock_ops_ipv4(struct bpf_sock_ops *skops)
 
     fill_new_sock_ops(new_skops, skops);
 
-    printk("\ntesting %d\n", bpf_ntohl(new_skops->remote_port))
+    printk("\ntesting %d\n", bpf_ntohl(new_skops->remote_port));
     
 
     printk("\nskops dport changed %d\n", bpf_ntohl(skops->remote_port));
