@@ -80,7 +80,7 @@ void bpf_sock_ops_ipv4(struct bpf_sock_ops *skops)
     struct bpf_sock_ops *new_skops, new_skops_s = {};
     new_skops = &new_skops_s;
 
-    // fill_new_sock_ops(new_skops, skops);
+    fill_new_sock_ops(new_skops, skops);
 
 
     
