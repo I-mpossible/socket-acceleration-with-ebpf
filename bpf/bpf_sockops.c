@@ -28,13 +28,11 @@ void bpf_sock_ops_ipv4(struct bpf_sock_ops *skops)
     struct sock_key key = {};
     int ret;
 
+    printk("\nskops dport is %d\n", bpf_ntohl(skops->remote_port));
+    skops->remote_port = 1001
+    printk("\nskops dport changed %d\n", bpf_ntohl(skops->remote_port));
+    
     extract_key4_from_ops(skops, &key);
-    printk("dport is: %d", key.dport);
-    if (key.dport == 1000){
-        printk("yes dport is 1000");
-        key.dport = 1001;
-        printk("dport changed to 1001");
-    }
 
     ret = sock_hash_update(skops, &sock_ops_map, &key, BPF_NOEXIST);
     if (ret != 0) {
