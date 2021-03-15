@@ -80,9 +80,9 @@ struct sock_key {
 
 //instantiate bpf_map_def by assiging default value
 struct bpf_map_def __section("maps") sock_ops_map = {
-	.type           = BPF_MAP_TYPE_SOCKMAP,
+	.type           = BPF_MAP_TYPE_SOCKHASH,
 	.key_size       = sizeof(struct sock_key),
 	.value_size     = sizeof(int),
 	.max_entries    = 65535,
-	// .map_flags      = 0,
+	.map_flags      = 0,
 };
