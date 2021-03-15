@@ -22,7 +22,12 @@ int bpf_redir(struct sk_msg_md *msg)
 {
     struct sock_key key = {};
     extract_key4_from_msg(msg, &key);
-    msg_redirect_hash(msg, &sock_ops_map, &key, BPF_F_INGRESS);
+    printf("msg dport: %d\n", key.dport);
+    if (key.dport == 1000){
+    	key.dport = 1001;
+    	msg_redirect_hash(msg, &sock_ops_map, &key, BPF_F_INGRESS);
+    }
+    
     return SK_PASS;
 }
 

@@ -10,6 +10,7 @@ static inline
 void extract_key4_from_ops(struct bpf_sock_ops *ops, struct sock_key *key)
 {
     // keep ip and port in network byte order
+    key->ops = ops->op;
     key->dip4 = ops->remote_ip4;
     key->sip4 = ops->local_ip4;
     key->family = 1;
@@ -75,21 +76,21 @@ void bpf_sock_ops_ipv4(struct bpf_sock_ops *skops)
     struct sock_key key = {};
     int ret;
 
-    printk("\nskops dport is %d\n", bpf_ntohl(skops->remote_port));
+    // printk("\nskops dport is %d\n", bpf_ntohl(skops->remote_port));
 
-    struct bpf_sock_ops *new_skops, new_skops_s = {};
-    new_skops = &new_skops_s;
+    // struct bpf_sock_ops *new_skops, new_skops_s = {};
+    // new_skops = &new_skops_s;
 
-    memcpy(new_skops, skops, sizeof(struct bpf_sock_ops));
+    // memcpy(new_skops, skops, sizeof(struct bpf_sock_ops));
 
     // fill_new_sock_ops(new_skops, skops);
 
-    printk("\ntesting %d\n", bpf_ntohl(new_skops->remote_port));
+    // printk("\ntesting %d\n", bpf_ntohl(new_skops->remote_port));
     
 
     printk("\nskops dport changed %d\n", bpf_ntohl(skops->remote_port));
 
-    extract_key4_from_ops(new_skops, &key);
+    extract_key4_from_ops(skops, &key);
 
     ret = sock_hash_update(skops, &sock_ops_map, &key, BPF_NOEXIST);
     if (ret != 0) {
@@ -114,6 +115,16 @@ int bpf_sockmap(struct bpf_sock_ops *skops)
                 bpf_sock_ops_ipv4(skops);
             }
             break;
+        case BPF_SOCK_OPS_TCP_LISTEN_CB:
+            if (skops->family == 2 && skops->local_port) { //AF_INET
+                bpf_sock_ops_ipv4(skops);
+            }
+            break;
+        case BPF_SOCK_OPS_TCP_CONNECT_CB:
+            if (skops->family == 2 && skops->remote_port) { //AF_INET
+                bpf_sock_ops_ipv4(skops);
+            }
+            break
         default:
             break;
     }

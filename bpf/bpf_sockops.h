@@ -67,6 +67,7 @@ struct bpf_map_def {
 };
 
 struct sock_key {
+	__u32 ops;
 	__u32 sip4;
 	__u32 dip4;
 	__u8  family;
