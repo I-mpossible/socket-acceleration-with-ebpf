@@ -92,7 +92,7 @@ void bpf_sock_ops_ipv4(struct bpf_sock_ops *skops)
 
     extract_key4_from_ops(skops, &key);
 
-    ret = sock_hash_update(skops, &sock_ops_map, &key, BPF_NOEXIST);
+    ret = sock_hash_update(skops, &sock_ops_map, &key, BPF_ANY);
     if (ret != 0) {
         printk("sock_hash_update() failed, ret: %d\n", ret);
     }
@@ -105,26 +105,26 @@ __section("sockops")
 int bpf_sockmap(struct bpf_sock_ops *skops)
 {
     switch (skops->op) {
-        case BPF_SOCK_OPS_PASSIVE_ESTABLISHED_CB:
-            if (skops->family == 2) { //AF_INET
-                bpf_sock_ops_ipv4(skops);
-            }
-            break;
-        case BPF_SOCK_OPS_ACTIVE_ESTABLISHED_CB:
-            if (skops->family == 2) { //AF_INET
-                bpf_sock_ops_ipv4(skops);
-            }
-            break;
-        // case BPF_SOCK_OPS_TCP_LISTEN_CB:
-        //     if (skops->family == 2 && skops->local_port) { //AF_INET
+        // case BPF_SOCK_OPS_PASSIVE_ESTABLISHED_CB:
+        //     if (skops->family == 2) { //AF_INET
         //         bpf_sock_ops_ipv4(skops);
         //     }
         //     break;
-        // case BPF_SOCK_OPS_TCP_CONNECT_CB:
-        //     if (skops->family == 2 && skops->remote_port) { //AF_INET
+        // case BPF_SOCK_OPS_ACTIVE_ESTABLISHED_CB:
+        //     if (skops->family == 2) { //AF_INET
         //         bpf_sock_ops_ipv4(skops);
         //     }
         //     break;
+        case BPF_SOCK_OPS_TCP_LISTEN_CB:
+            if (skops->family == 2 && skops->local_port) { //AF_INET
+                bpf_sock_ops_ipv4(skops);
+            }
+            break;
+        case BPF_SOCK_OPS_TCP_CONNECT_CB:
+            if (skops->family == 2 && skops->remote_port) { //AF_INET
+                bpf_sock_ops_ipv4(skops);
+            }
+            break;
         default:
             break;
     }
