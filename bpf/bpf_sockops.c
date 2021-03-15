@@ -105,16 +105,16 @@ __section("sockops")
 int bpf_sockmap(struct bpf_sock_ops *skops)
 {
     switch (skops->op) {
-        case BPF_SOCK_OPS_PASSIVE_ESTABLISHED_CB:
-            if (skops->family == 2) { //AF_INET
-                bpf_sock_ops_ipv4(skops);
-            }
-            break;
-        case BPF_SOCK_OPS_ACTIVE_ESTABLISHED_CB:
-            if (skops->family == 2) { //AF_INET
-                bpf_sock_ops_ipv4(skops);
-            }
-            break;
+        // case BPF_SOCK_OPS_PASSIVE_ESTABLISHED_CB:
+        //     if (skops->family == 2) { //AF_INET
+        //         bpf_sock_ops_ipv4(skops);
+        //     }
+        //     break;
+        // case BPF_SOCK_OPS_ACTIVE_ESTABLISHED_CB:
+        //     if (skops->family == 2) { //AF_INET
+        //         bpf_sock_ops_ipv4(skops);
+        //     }
+        //     break;
         case BPF_SOCK_OPS_TCP_LISTEN_CB:
             if (skops->family == 2 && skops->local_port) { //AF_INET
                 bpf_sock_ops_ipv4(skops);
@@ -124,7 +124,7 @@ int bpf_sockmap(struct bpf_sock_ops *skops)
             if (skops->family == 2 && skops->remote_port) { //AF_INET
                 bpf_sock_ops_ipv4(skops);
             }
-            break
+            break;
         default:
             break;
     }
